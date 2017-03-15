@@ -105,7 +105,7 @@ def main(DAYS_BACK=None, custom=None):
         # Munging strings used in the final product/output ...
         legacy_site_date_page_url = 'http://www.legacy.com/obituaries/registerguard/obituary-search.aspx?daterange=0&specificdate=%s&countryid=1&stateid=48&affiliateid=1765&entriesperpage=50' % (
             i_days_ago.strftime("%Y%m%d"))
-        pre_string = u'\t<a href="%s" target="_blank"><h1>%s</h1></a>\n\t<div class="obituary_date">\n' % (
+        pre_string = u'\t<div class="obituary_date">\n\t\t<a href="%s" target="_blank"><h1>%s</h1></a>\n' % (
             legacy_site_date_page_url, i_days_ago.strftime('%A, %B %-d, %Y'))
 
         days_obits = tree[
@@ -117,7 +117,7 @@ def main(DAYS_BACK=None, custom=None):
                     maiden_name = u'(%s)' % e.MaidenName
                 else:
                     maiden_name = ''
-                main_string += u'\t\t<a href="%s" target="_blank"><h2>%s %s %s %s %s %s %s %s</h2></a>\n' % \
+                main_string += u'\t\t<div class="obituary_item">\n\t\t\t<a href="%s" target="_blank"><h2>%s %s %s %s %s %s %s %s</h2></a>\n' % \
                     (
                         e.DisplayURL,
                         e.NamePrefix,
@@ -132,12 +132,14 @@ def main(DAYS_BACK=None, custom=None):
 
                 image_url = getattr(e, 'ImageUrl', '')
                 if image_url:
-                    main_string += u'\t\t<a href="{0}" target="_blank"><img src="{1}" alt="{2} {3}" /></a>\n'.format(
+                    main_string += u'\t\t\t<a href="{0}" target="_blank"><img src="{1}" alt="{2} {3}" /></a>\n'.format(
                         e.DisplayURL,
                         image_url,
                         e.FirstName,
                         e.LastName,
                     )
+
+                main_string += u'\t\t</div> <!-- /.obituary_item -->\n'
 
                 # Clean up date for alpha_list ...
                 date_obj = datetime.datetime.strptime(e.DateCompleted.text, '%Y-%m-%dT00:00:00')
@@ -153,7 +155,8 @@ def main(DAYS_BACK=None, custom=None):
             print 'Aw man, no Obits today! %s' % i_days_ago_string
             main_string = u'<li>No obituaries published.</li>\n'
 
-        daily_string = pre_string + main_string + u'\t</div> <!-- /.obituary_date -->\n'
+        main_string += u'\t</div> <!-- /.obituary_date -->\n'
+        daily_string = pre_string + main_string
         outstring += daily_string
         # Clean out main_string for next loop/day's use ...
         main_string = u''
