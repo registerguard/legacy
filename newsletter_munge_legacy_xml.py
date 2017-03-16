@@ -3,6 +3,7 @@
 from lxml import objectify
 
 import datetime
+from django.template.defaultfilters import truncatewords
 import os
 import platform
 import pprint
@@ -22,6 +23,9 @@ list that many days long. e.g., "./get_legacies_xml.py 5" will output 5 days'
 worth into files named:
 'obitsLegacyCustom.html'
 'obitsLegacyLinksByDateCustom.html'
+
+If you pass a second integer, that'll be how many words you get between the
+paragraph tags.
 
 Otherwise, with no extra argument, the default is 30 days into the files as
 above.
@@ -84,7 +88,9 @@ if platform.platform().count('Linux'): # running on AWS EC2 instance, probably .
 else: # testing locally, probably ...
     OUTFILE_PATH = os.path.realpath(os.path.join(os.path.dirname(__file__)))
 
-def main(DAYS_BACK=None, custom=None):
+def main(DAYS_BACK=None, custom=None, word_trim=None):
+    if not word_trim:
+        word_trim = 100
     # Loop through number of DAYS_BACK ...
     main_string = ''
     outstring = ''
@@ -117,7 +123,20 @@ def main(DAYS_BACK=None, custom=None):
                     maiden_name = u'(%s)' % e.MaidenName
                 else:
                     maiden_name = ''
-                main_string += u'\t\t<div class="obituary_item">\n\t\t\t<a href="%s" target="_blank"><h2>%s %s %s %s %s %s %s %s</h2></a>\n' % \
+
+                main_string += u'\t\t<div class="obituary_item">\n'
+
+                # Check for an image
+                image_url = getattr(e, 'ImageUrl', '')
+                if image_url:
+                    main_string += u'\t\t\t<a href="{0}" target="_blank"><img src="{1}" alt="{2} {3}" /></a>\n'.format(
+                        e.DisplayURL,
+                        image_url,
+                        e.FirstName,
+                        e.LastName,
+                    )
+
+                main_string += u'\t\t\t<a href="%s" target="_blank"><h2>%s %s %s %s %s %s %s %s</h2></a>\n' % \
                     (
                         e.DisplayURL,
                         e.NamePrefix,
@@ -130,13 +149,14 @@ def main(DAYS_BACK=None, custom=None):
                         e.NameAdditionalSuffix,
                     )
 
-                image_url = getattr(e, 'ImageUrl', '')
-                if image_url:
-                    main_string += u'\t\t\t<a href="{0}" target="_blank"><img src="{1}" alt="{2} {3}" /></a>\n'.format(
-                        e.DisplayURL,
-                        image_url,
-                        e.FirstName,
-                        e.LastName,
+                # Process the tribute text
+                #
+                # Split on '<br><br>', lop off first chunk
+                graf_list = e.NoticeText.text.split('<br><br>')[1:]
+                untrimmed_text = u' '.join(graf_list)
+                trimmed_text = truncatewords(untrimmed_text, word_trim)
+                main_string += u'\t\t\t<p>{0}</p>\n'.format(
+                        trimmed_text,
                     )
 
                 main_string += u'\t\t</div> <!-- /.obituary_item -->\n'
@@ -146,11 +166,7 @@ def main(DAYS_BACK=None, custom=None):
                 formatted_date_str = date_obj.strftime('%B %d, %Y')
                 # Gather names here for alpha_list ...
                 alpha_list.append([ e.LastName, e.FirstName, formatted_date_str, e.DisplayURL ])
-                
-                # try:
-                #     print '   ', e.ImageUrl.text
-                # except AttributeError, err:
-                #     print err
+
         else:
             print 'Aw man, no Obits today! %s' % i_days_ago_string
             main_string = u'<li>No obituaries published.</li>\n'
@@ -190,8 +206,11 @@ def main(DAYS_BACK=None, custom=None):
     outfile_alpha.close()
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
+    if len(sys.argv) == 2:
         custom = True
         main(DAYS_BACK=int(sys.argv[1]), custom=True)
+    elif len(sys.argv) == 3:
+        custom = True
+        main(DAYS_BACK=int(sys.argv[1]), custom=True, word_trim=sys.argv[2])
     else:
         main(30, custom = False)
