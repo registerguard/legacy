@@ -169,7 +169,10 @@ def main(DAYS_BACK=None, custom=None, word_trim=None):
 
         else:
             print 'Aw man, no Obits today! %s' % i_days_ago_string
-            main_string = u'<li>No obituaries published.</li>\n'
+
+            main_string += u'\t\t<div class="obituary_item">\n'
+            main_string += u'\t\t\t<h2>No new obituaries added.</h2>\n'
+            main_string += u'\t\t</div> <!-- /.obituary_item -->\n'
 
         main_string += u'\t</div> <!-- /.obituary_date -->\n'
         daily_string = pre_string + main_string
