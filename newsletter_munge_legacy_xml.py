@@ -129,18 +129,18 @@ def main(DAYS_BACK=None, custom=None, word_trim=None):
                 # Check for an image
                 image_url = getattr(e, 'ImageUrl', '')
                 if image_url:
-                    main_string += u'\t\t\t<a href="{0}?utm_source=RG_Obituaries&utm_medium=email&utm_campaign=RG_Obituaries_{1}&utm_content=image" target="_blank"><img src="{2}" alt="{3} {4}" /></a>\n'.format(
+                    main_string += u'\t\t\t<a href="{0}&utm_source=RG_Obituaries&utm_medium=email&utm_campaign=RG_Obituaries_{1}&utm_content=image" target="_blank"><img src="{2}" alt="{3} {4}" /></a>\n'.format(
                         e.DisplayURL,
-                        i_days_ago.strftime('%Y-%m-%d'),
+                        TODAY.strftime('%Y-%m-%d'),
                         image_url,
                         e.FirstName,
                         e.LastName,
                     )
 
-                main_string += u'\t\t\t<a href="%s?utm_source=RG_Obituaries&utm_medium=email&utm_campaign=RG_Obituaries_%s&utm_content=headline" target="_blank"><h2>%s %s %s %s %s %s %s %s</h2></a>\n' % \
+                main_string += u'\t\t\t<a href="%s&utm_source=RG_Obituaries&utm_medium=email&utm_campaign=RG_Obituaries_%s&utm_content=headline" target="_blank"><h2>%s %s %s %s %s %s %s %s</h2></a>\n' % \
                     (
                         e.DisplayURL,
-                        i_days_ago.strftime('%Y-%m-%d'),
+                        TODAY.strftime('%Y-%m-%d'),
                         e.NamePrefix,
                         e.NameAdditionalPrefix,
                         e.FirstName,
