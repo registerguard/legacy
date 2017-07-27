@@ -187,7 +187,7 @@ def main(DAYS_BACK=None, custom=None, word_trim=None):
     else:
         outfile = open(os.path.join(OUTFILE_PATH, OUTFILE_DATE), 'w')
 
-    outstring = '<div class="obituaries_by_date">\n{0}\n</div> <!-- /.obituaries_by_date -->'.format(outstring.rstrip())
+    outstring = u'<div class="obituaries_by_date">\n{0}\n</div> <!-- /.obituaries_by_date -->'.format(outstring.rstrip())
     outfile.write(outstring.encode('utf-8'))
     outfile.close()
 
