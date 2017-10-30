@@ -1,6 +1,5 @@
 .DS_Store
 *.pyc
 
-get_legacies_xml.py
 legacy_settings.py
 obitsLegacy*
