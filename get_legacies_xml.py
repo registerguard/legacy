@@ -104,8 +104,12 @@ def main(DAYS_BACK=None, custom=None):
 
         # Parse the day's XML feed ...
         # https://www.legacy.com/services/notices.asp?Affiliate=registerguard&Password=LEGACY_PW&RunDate=20140101
-        raw_doc = urllib2.urlopen(
-            'https://www.legacy.com/services/notices.asp?Affiliate=registerguard&Password=LEGACY_PW&RunDate=%s' % i_days_ago_string).read()
+
+        request = urllib2.Request('https://www.legacy.com/services/notices.asp?Affiliate=registerguard&Password=%s&RunDate=%s' % (LEGACY_PW, i_days_ago_string))
+        opener = urllib2.build_opener()
+        opener.addheaders = [('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:56.0) Gecko/20100101 Firefox/56.0')]
+        raw_doc = opener.open(request).read()
+        print raw_doc
         doc = objectify.parse(StringIO(raw_doc))
         tree = doc.getroot()
 
