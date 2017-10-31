@@ -188,7 +188,7 @@ def main(DAYS_BACK=None, custom=None, word_trim=None):
         outfile = open(os.path.join(OUTFILE_PATH, OUTFILE_DATE), 'w')
 
     outstring = u'<div class="obituaries_by_date">\n{0}\n</div> <!-- /.obituaries_by_date -->'.format(outstring.rstrip())
-    outfile.write(outstring.encode('utf-8'))
+    outfile.write(outstring.encode('cp1252'))
     outfile.close()
 
     '''
@@ -207,7 +207,7 @@ def main(DAYS_BACK=None, custom=None, word_trim=None):
         outfile_alpha = open(os.path.join(OUTFILE_PATH, OUTFILE_ALPHA_CUSTOM), 'w')
     else:
         outfile_alpha = open(os.path.join(OUTFILE_PATH, OUTFILE_ALPHA), 'w')
-    outfile_alpha.write(alpha_string_out.encode('utf-8'))
+    outfile_alpha.write(alpha_string_out.encode('cp1252'))
     outfile_alpha.close()
 
 if __name__ == "__main__":
