@@ -149,7 +149,7 @@ def main(DAYS_BACK=None, custom=None):
         # Clean out main_string for next loop/day's use ...
         main_string = u''
 
-    outstring = top_string + outstring + bottom_string
+    # outstring = top_string + outstring + bottom_string
 
     if custom:
         outfile = open(os.path.join(OUTFILE_PATH, OUTFILE_DATE_CUSTOM), 'w')
