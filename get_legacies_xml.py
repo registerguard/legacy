@@ -153,7 +153,7 @@ def main(DAYS_BACK=None, custom=None):
         outfile = open(os.path.join(OUTFILE_PATH, OUTFILE_DATE_CUSTOM), 'w')
     else:
         outfile = open(os.path.join(OUTFILE_PATH, OUTFILE_DATE), 'w')
-    outfile.write(outstring.encode('cp1252', 'xmlcharrefreplace'))
+    outfile.write(outstring.encode('cp1252'))
     outfile.close()
 
     '''
@@ -172,7 +172,7 @@ def main(DAYS_BACK=None, custom=None):
         outfile_alpha = open(os.path.join(OUTFILE_PATH, OUTFILE_ALPHA_CUSTOM), 'w')
     else:
         outfile_alpha = open(os.path.join(OUTFILE_PATH, OUTFILE_ALPHA), 'w')
-    outfile_alpha.write(alpha_string_out.encode('cp1252', 'xmlcharrefreplace'))
+    outfile_alpha.write(alpha_string_out.encode('cp1252'))
     outfile_alpha.close()
 
 if __name__ == "__main__":
