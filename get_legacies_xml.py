@@ -109,7 +109,6 @@ def main(DAYS_BACK=None, custom=None):
         opener = urllib2.build_opener()
         opener.addheaders = [('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:56.0) Gecko/20100101 Firefox/56.0')]
         raw_doc = opener.open(request).read()
-        print raw_doc
         doc = objectify.parse(StringIO(raw_doc))
         tree = doc.getroot()
 
