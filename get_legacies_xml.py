@@ -149,13 +149,11 @@ def main(DAYS_BACK=None, custom=None):
         # Clean out main_string for next loop/day's use ...
         main_string = u''
 
-    # outstring = top_string + outstring + bottom_string
-
     if custom:
         outfile = open(os.path.join(OUTFILE_PATH, OUTFILE_DATE_CUSTOM), 'w')
     else:
         outfile = open(os.path.join(OUTFILE_PATH, OUTFILE_DATE), 'w')
-    outfile.write(outstring.encode('utf-8'))
+    outfile.write(outstring.encode('cp1252', 'xmlcharrefreplace'))
     outfile.close()
 
     '''
@@ -169,14 +167,12 @@ def main(DAYS_BACK=None, custom=None):
     for alpha_list_item in alpha_list:
         alpha_list_out.append('<li><a href="%s">%s, %s</a><br><small style="text-transform:uppercase; color: #666; letter-spacing:.05em; font-family:arial,san-serif;">%s</small></li>' % (alpha_list_item[3], alpha_list_item[0], alpha_list_item[1], alpha_list_item[2]))
     alpha_string_out = '<ul class="li2">\n' + '\n'.join(alpha_list_out) + '</ul>\n'
-    
-    alpha_string_out = top_string + alpha_string_out + bottom_string
 
     if custom:
         outfile_alpha = open(os.path.join(OUTFILE_PATH, OUTFILE_ALPHA_CUSTOM), 'w')
     else:
         outfile_alpha = open(os.path.join(OUTFILE_PATH, OUTFILE_ALPHA), 'w')
-    outfile_alpha.write(alpha_string_out.encode('utf-8'))
+    outfile_alpha.write(alpha_string_out.encode('cp1252', 'xmlcharrefreplace'))
     outfile_alpha.close()
 
 if __name__ == "__main__":
